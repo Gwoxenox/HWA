@@ -1,4 +1,4 @@
-drop schema hwa;
+drop schema if exists hwa;
 
 CREATE SCHEMA IF NOT EXISTS `hwa`;
 

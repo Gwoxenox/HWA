@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Series Planner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+
+<body>
+    <form id="new_series">
+        <fieldset>
+            <legend>Add a new series</legend>
+            <ul>
+                <li>
+                    <label for="series_name">Name</label>
+                    <input type="text" id="name">
+                </li>
+                <li>
+                    <label for "car">Car</label>
+                    <input type="text" id=car>
+                </li>
+            </ul>
+            <input type="submit">
+        </fieldset>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        const getSeries = async () => {
+            const res = await axios.get("/hwa/");
+            output.innerHTML = "";
+            res.data.forEach(series => renderSeries(series));
+        }
+        const renderSeries = ({ seriesId, name, car }) => {
+            const column = document.createElement("div");
+            column.className = "col";
+
+            const card = document.createElement("div");
+            card.className = "card";
+            column.appendChild(card);
+
+            const cardBody = document.createElement("div");
+            cardBody.className = "card-body";
+            card.appendChild(cardBody);
+
+            const makeText = document.createElement("p");
+            makeText.className = "card-text";
+            makeText.innerText = `Name: ${name}`;
+            cardBody.appendChild(nameText);
+
+            const modelText = document.createElement("p");
+            modelText.className = "card-text";
+            modelText.innerText = `Car: ${car}`;
+            cardBody.appendChild(modelText);
+
+            const cardFooter = document.createElement("div");
+            cardFooter.className = "card-footer";
+            card.appendChild(cardFooter);
+
+            const updateButton = document.createElement("a");
+            updateButton.innerText = "Update";
+            updateButton.className = "card-link";
+            updateButton.addEventListener("click", function () {
+                deleteSeries(seriesId);
+            });
+
+            const deleteButton = document.createElement("a");
+            deleteButton.innerText = "Delete";
+            deleteButton.className = "card-link";
+            deleteButton.addEventListener("click", function () {
+                deleteSeries(seriesId);
+            })
+
+            cardFooter.appendChild(updateButton);
+            cardFooter.appendChild(deleteButton);
+
+            output.appendChild(column);
+        }
+
+        getSeries();
+
+        document.getElementById("createForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const data = {
+                name: this.name.value,
+                car: this.car.value,
+            }
+
+            axios.post("/series/create", data)
+                .then(res => {
+                    getSeries();
+                    this.reset();
+                }).catch(err => console.log(err));
+
+            console.log(this);
+        });
+
+        const deleteSeries = async (seriesId) => {
+            const res = await axios.delete(`/series/remove/${id}`);
+            getSeries();
+        };
+
+        const updateSeries = async (seriesId) => {
+
+        };
+    </script>
+</body>
+
+</html>

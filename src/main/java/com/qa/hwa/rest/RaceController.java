@@ -13,40 +13,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.qa.hwa.domain.Series;
-import com.qa.hwa.dto.SeriesDTO;
-import com.qa.hwa.service.SeriesService;
+import com.qa.hwa.domain.Race;
+import com.qa.hwa.dto.RaceDTO;
+import com.qa.hwa.service.RaceService;
 
 @RestController
-@RequestMapping("/series")
-public class SeriesController {
+@RequestMapping("/race")
+public class RaceController {
 
-	private SeriesService service;
+	private RaceService service;
 
 	@Autowired
-	public SeriesController(SeriesService service) {
+	public RaceController(RaceService service) {
 		super();
 		this.service = service;
 	}
 
 	@PostMapping("/create")
-	public SeriesDTO createSeries(@RequestBody Series series) {
-		return this.service.createSeries(series);
+	public RaceDTO createRace(@RequestBody Race race) {
+		return this.service.createRace(race);
 	}
 
 	@GetMapping("/find/{id}")
-	public SeriesDTO find(@PathVariable int id) {
-		return this.service.findSeries(id);
+	public RaceDTO find(@PathVariable int id) {
+		return this.service.findRace(id);
 	}
 
 	@GetMapping("/")
-	public List<SeriesDTO> getSeries() {
-		return this.service.getSeries();
+	public List<RaceDTO> getRace() {
+		return this.service.getRace();
 	}
 
 	@PutMapping("/update/{id}")
-	public SeriesDTO updateSeries(@RequestBody Series series, @PathVariable int id) {
-		return this.service.updateSeries(id, series);
+	public RaceDTO updateRace(@RequestBody Race race, @PathVariable int id) {
+		return this.service.updateRace(id, race);
 	}
 
 	@DeleteMapping("/remove/{id}")

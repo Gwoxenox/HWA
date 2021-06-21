@@ -24,6 +24,10 @@ public class Series {
 	@JsonIgnore
 	private List<Race> races;
 	
+	public Series() {
+		
+	}
+	
 	public Series(String name, String car) {
 		this.name = name;
 		this.car = car;

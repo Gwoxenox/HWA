@@ -1,6 +1,7 @@
 package com.qa.hwa.domain;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,9 +21,9 @@ public class Series {
 	private String name;
 	private String car;
 	
-	@OneToMany(mappedBy = "series")
+	@OneToMany(mappedBy = "seriesId")
 	@JsonIgnore
-	private List<Race> races;
+	private List<Race> races = new ArrayList<Race>();
 	
 	public Series() {
 		

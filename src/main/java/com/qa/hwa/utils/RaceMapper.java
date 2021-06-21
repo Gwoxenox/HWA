@@ -15,7 +15,7 @@ public class RaceMapper {
 		dto.setRaceNo(race.getRaceNo());
 		dto.setCircuit(race.getCircuit());
 		dto.setNoOfLaps(race.getNoOfLaps());
-		dto.setSeriesId(race.getSeries().getSeriesId());
+		dto.setSeriesId(race.getSeriesId());
 
 		return dto;
 	}

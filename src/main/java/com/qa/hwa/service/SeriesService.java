@@ -11,18 +11,16 @@ import org.springframework.stereotype.Service;
 import com.qa.hwa.domain.Series;
 import com.qa.hwa.dto.SeriesDTO;
 import com.qa.hwa.utils.SeriesMapper;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
+import com.qa.hwa.repo.SeriesRepo;
 
 @Service
 public class SeriesService {
 
-	private JpaRepository<Series, Integer> repo;
+	private SeriesRepo repo;
 
 	private SeriesMapper mapper;
 
-	public SeriesService(JpaRepository<Series, Integer> repo, SeriesMapper mapper) {
+	public SeriesService(SeriesRepo repo, SeriesMapper mapper) {
 		super();
 		this.repo = repo;
 		this.mapper = mapper;

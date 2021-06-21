@@ -11,18 +11,16 @@ import org.springframework.stereotype.Service;
 import com.qa.hwa.domain.Race;
 import com.qa.hwa.dto.RaceDTO;
 import com.qa.hwa.utils.RaceMapper;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
+import com.qa.hwa.repo.RaceRepo;
 
 @Service
 public class RaceService {
 
-	private JpaRepository<Race, Integer> repo;
+	private RaceRepo repo;
 
 	private RaceMapper mapper;
 
-	public RaceService(JpaRepository<Race, Integer> repo, RaceMapper mapper) {
+	public RaceService(RaceRepo repo, RaceMapper mapper) {
 		super();
 		this.repo = repo;
 		this.mapper = mapper;

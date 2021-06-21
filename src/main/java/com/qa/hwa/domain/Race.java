@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.qa.hwa.domain.Series;
+
 @Entity
 public class Race {
 	
@@ -19,23 +21,25 @@ public class Race {
 	private Integer raceNo;
 	private String circuit;
 	private Integer noOfLaps;
+	private Integer seriesId;
 	
-	@ManyToOne
-	private Series series;
+	public Race() {
+		
+	}
 	
-	public Race(Integer raceNo, String circuit, Integer noOfLaps, Series series) {
+	public Race(Integer seriesId, Integer raceNo, String circuit, Integer noOfLaps) {
+		this.seriesId = seriesId;
 		this.raceNo = raceNo;
 		this.circuit = circuit;
 		this.noOfLaps = noOfLaps;
-		this.series = series;
 	}
 	
-	public Race(Integer id, Integer raceNo, String circuit, Integer noOfLaps, Series series) {
+	public Race(Integer id, Integer raceNo, String circuit, Integer noOfLaps, Integer seriesId) {
 		this.raceId = id;
 		this.raceNo = raceNo;
 		this.circuit = circuit;
 		this.noOfLaps = noOfLaps;
-		this.series = series;
+		this.seriesId = seriesId;
 	}
 
 	public Integer getRaceId() {
@@ -70,12 +74,12 @@ public class Race {
 		this.noOfLaps = noOfLaps;
 	}
 
-	public Series getSeries() {
-		return series;
+	public Integer getSeriesId() {
+		return seriesId;
 	}
 
-	public void setSeries(Series series) {
-		this.series = series;
+	public void setSeriesId(Integer seriesId) {
+		this.seriesId = seriesId;
 	}
 
 

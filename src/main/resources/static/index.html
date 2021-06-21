@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <form id="new_series">
+    <form id="newSeries">
         <fieldset>
             <legend>Add a new series</legend>
             <ul>
@@ -20,13 +20,43 @@
                     <input type="text" id="name">
                 </li>
                 <li>
-                    <label for "car">Car</label>
-                    <input type="text" id=car>
+                    <label for="car">Car</label>
+                    <input type="text" id="car">
                 </li>
             </ul>
             <input type="submit">
         </fieldset>
     </form>
+    <form id="newRace">
+        <fieldset>
+            <legend>Add a new race</legend>
+            <ul>
+                <li>
+                    <label for="seriesId">Series ID</label>
+                    <input type="number" id="seriesId">
+                </li>
+                <li>
+                    <label for="raceNo">Race No.</label>
+                    <input type="number" id="raceNo">
+                </li>
+                <li>
+                    <label for="circuit">Circuit</label>
+                    <input type="text" id="circuit">
+                </li>
+                <li>
+                    <label for="noOfLaps">No. of Laps</label>
+                    <input type="number" id="noOfLaps">
+                </li>
+            </ul>
+            <input type="submit">
+        </fieldset>
+    </form>
+    <div id="seriesCards">
+
+    </div>
+    <div id="raceCards">
+
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>
@@ -36,10 +66,18 @@
     <script>
         const getSeries = async () => {
             const res = await axios.get("/series/");
+            const output = document.getElementById("seriesCards");
             output.innerHTML = "";
             res.data.forEach(series => renderSeries(series));
         }
+        const getRaces = async () => {
+            const res = await axios.get("/race/");
+            const output = document.getElementById("raceCards");
+            output.innerHTML = "";
+            res.data.forEach(race => renderRace(race));
+        }
         const renderSeries = ({ seriesId, name, car }) => {
+            const output = document.getElementById("seriesCards");
             const column = document.createElement("div");
             column.className = "col";
 
@@ -51,26 +89,24 @@
             cardBody.className = "card-body";
             card.appendChild(cardBody);
 
-            const makeText = document.createElement("p");
-            makeText.className = "card-text";
-            makeText.innerText = `Name: ${name}`;
+            const seriesIdText = document.createElement("p");
+            seriesIdText.className = "card-text";
+            seriesIdText.innerText = `Id: ${seriesId}`;
+            cardBody.appendChild(seriesIdText);
+
+            const nameText = document.createElement("p");
+            nameText.className = "card-text";
+            nameText.innerText = `Name: ${name}`;
             cardBody.appendChild(nameText);
 
-            const modelText = document.createElement("p");
-            modelText.className = "card-text";
-            modelText.innerText = `Car: ${car}`;
-            cardBody.appendChild(modelText);
+            const carText = document.createElement("p");
+            carText.className = "card-text";
+            carText.innerText = `Car: ${car}`;
+            cardBody.appendChild(carText);
 
             const cardFooter = document.createElement("div");
             cardFooter.className = "card-footer";
             card.appendChild(cardFooter);
-
-            const updateButton = document.createElement("a");
-            updateButton.innerText = "Update";
-            updateButton.className = "card-link";
-            updateButton.addEventListener("click", function () {
-                deleteSeries(seriesId);
-            });
 
             const deleteButton = document.createElement("a");
             deleteButton.innerText = "Delete";
@@ -79,15 +115,64 @@
                 deleteSeries(seriesId);
             })
 
-            cardFooter.appendChild(updateButton);
+            cardFooter.appendChild(deleteButton);
+
+            output.appendChild(column);
+        }
+
+        const renderRace = ({ raceId, raceNo, circuit, noOfLaps, seriesId }) => {
+            const output = document.getElementById("raceCards");
+            const column = document.createElement("div");
+            column.className = "col";
+
+            const card = document.createElement("div");
+            card.className = "card";
+            column.appendChild(card);
+
+            const cardBody = document.createElement("div");
+            cardBody.className = "card-body";
+            card.appendChild(cardBody);
+
+            const seriesIdText = document.createElement("p");
+            seriesIdText.className = "card-text";
+            seriesIdText.innerText = `Series: ${seriesId}`;
+            cardBody.appendChild(seriesIdText);
+
+            const raceNoText = document.createElement("p");
+            raceNoText.className = "card-text";
+            raceNoText.innerText = `Race No.: ${raceNo}`;
+            cardBody.appendChild(raceNoText);
+
+            const circuitText = document.createElement("p");
+            circuitText.className = "card-text";
+            circuitText.innerText = `Circuit: ${circuit}`;
+            cardBody.appendChild(circuitText);
+
+            const lapsText = document.createElement("p");
+            lapsText.className = "card-text";
+            lapsText.innerText = `No. of Laps: ${noOfLaps}`;
+            cardBody.appendChild(lapsText);
+
+            const cardFooter = document.createElement("div");
+            cardFooter.className = "card-footer";
+            card.appendChild(cardFooter);
+
+            const deleteButton = document.createElement("a");
+            deleteButton.innerText = "Delete";
+            deleteButton.className = "card-link";
+            deleteButton.addEventListener("click", function () {
+                deleteRace(raceId);
+            })
+
             cardFooter.appendChild(deleteButton);
 
             output.appendChild(column);
         }
 
         getSeries();
+        getRaces();
 
-        document.getElementById("createForm").addEventListener("submit", function (event) {
+        document.getElementById("newSeries").addEventListener("submit", function (event) {
             event.preventDefault();
 
             const data = {
@@ -104,14 +189,35 @@
             console.log(this);
         });
 
+        document.getElementById("newRace").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const datar = {
+                seriesId: this.seriesId.value,
+                raceNo: this.raceNo.value,
+                circuit: this.circuit.value,
+                noOfLaps: this.noOfLaps.value,
+            }
+
+            axios.post("/race/create", datar)
+                .then(res => {
+                    getRaces();
+                    this.reset();
+                }).catch(err => console.log(err));
+
+            console.log(this);
+        });
+
         const deleteSeries = async (seriesId) => {
-            const res = await axios.delete(`/series/remove/${id}`);
-            getSeries();
+            const res = await axios.delete(`/series/remove/${seriesId}`);
+            location.reload();
         };
 
-        const updateSeries = async (seriesId) => {
-
+        const deleteRace = async (raceId) => {
+            const res = await axios.delete(`/race/remove/${raceId}`);
+            location.reload();
         };
+
     </script>
 </body>
 
